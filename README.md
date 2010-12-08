@@ -6,6 +6,8 @@ Gem for working with the Billwise SOAP/XML API.
 Examples
 --------
 
+	require 'billwise4r'
+	
 	billwise = Billwise.new({ :company_id => 123,
    				              :username   => 'user',
 				              :password   => 'pass',

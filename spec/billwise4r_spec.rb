@@ -2,10 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Billwise" do
   before(:all) do
-    @options = { :companyCd => 124,
-                 :username  => 'user',
-                 :password  => 'pass',
-                 :log       => false }
+    config = YAML.load(File.open('spec/config/config.yml'))
+    @options = config.merge!({ :log => false })
                                
     @billwise = Billwise.new @options
   end

@@ -9,18 +9,22 @@ class Billwise
     @companyCd = params[:companyCd]    
     log        = params[:log]       || false
     log_level  = params[:log_level] || false
-     
-    #Build our SOAP driver
-    Savon::SOAP.version      = 2
-    Savon::WSSE.username     = params[:username] 
-    Savon::WSSE.password     = params[:password] 
-    Savon::Request.log       = log
-    Savon::Request.log_level = log_level
     
-    @soap_driver    = Savon::Client.new params[:wsdlUrl] || 'https://cwa021.connect4billing.com/axis2/services/ConnectSmService?wsdl'
+    Savon.configure do |config|
+      config.log       = log
+      config.log_level = log_level
+    end
+    
     @soap_endpoint  = URI.parse params[:endpoint] || 'https://cwa021.connect4billing.com/axis2/services/ConnectSmService.ConnectSmServiceHttpSoap12Endpoint/'
-    @soap_namespace = namespace  = params[:namespace] || 'http://connectsm.ws.bwse.com/xsd'
+    @soap_namespace = params[:namespace] || 'http://connectsm.ws.bwse.com/xsd'
+    @soap_version   = 2
     
+    # Build our SOAP driver    
+    @soap_driver = Savon::Client.new do
+      wsse.credentials params[:username] , params[:password]
+      wsdl.document = params[:wsdlUrl] || 'https://cwa021.connect4billing.com/axis2/services/ConnectSmService?wsdl'
+    end
+        
     @tag_order  = tag_order
     
     MultiXml.parser = :nokogiri
@@ -32,9 +36,10 @@ class Billwise
   #
   # @return [Hash] the Billwise response
   def method_missing(method, params)
-    response = @soap_driver.send(method) do |soap, wsse|
+    response = @soap_driver.request(:xsd, method) do |soap, wsse|
+      soap.version = @soap_version
       soap.endpoint = @soap_endpoint
-      soap.namespaces["xmlns:wsdl"] = @soap_namespace
+      soap.namespaces["xmlns:xsd"] = @soap_namespace
       
       fields = { :companyCd => @companyCd }.merge!(params)
       fields.merge!({ :order! => @tag_order[method] }) if @tag_order[method]
@@ -62,7 +67,7 @@ class Billwise
   # @return [Hash] the methods and their ordered parameters
   def tag_order
     actions = {}
-    MultiXml.parse(@soap_driver.wsdl.to_s)['definitions']['types']['schema'][2]['element'].each do |action|
+    MultiXml.parse(@soap_driver.wsdl.to_xml)['definitions']['types']['schema'][2]['element'].each do |action|
       attributes = []
       if action['complexType']['sequence']['element'].instance_of?(Hash)
         attributes << action['complexType']['sequence']['element']['name'].to_sym

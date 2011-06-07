@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{billwise4r}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jason Goecke"]
-  s.date = %q{2010-12-07}
+  s.date = %q{2011-06-07}
   s.description = %q{Ruby lib for consuming the Billwise SOAP/XML API}
   s.email = %q{jason@goecke.net}
   s.extra_rdoc_files = [
@@ -19,21 +19,23 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     "Gemfile",
-    "Gemfile.lock",
     "LICENSE.txt",
     "README.md",
     "Rakefile",
     "VERSION",
+    "billwise4r.gemspec",
     "lib/billwise4r.rb",
     "lib/billwise4r/billwise4r.rb",
     "spec/billwise4r_spec.rb",
+    "spec/config/.gitignore",
+    "spec/config/config.yml",
     "spec/connect_sm_service.wsdl",
     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/tropo/billwise4r}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.5.0}
   s.summary = %q{Ruby lib for consuming the Billwise SOAP/XML API}
   s.test_files = [
     "spec/billwise4r_spec.rb",
@@ -41,10 +43,9 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<savon>, [">= 0"])
       s.add_runtime_dependency(%q<multi_xml>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])

@@ -23,8 +23,11 @@ class Billwise
     @soap_driver = Savon::Client.new do
       wsse.credentials params[:username] , params[:password]
       wsdl.document = params[:wsdlUrl] || 'https://cwa021.connect4billing.com/axis2/services/ConnectSmService?wsdl'
+
+      
     end
-        
+    @soap_driver.http.read_timeout = params[:timeout] || 300
+    
     @tag_order  = tag_order
     
     MultiXml.parser = :nokogiri

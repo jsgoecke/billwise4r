@@ -27,6 +27,14 @@ describe "Billwise" do
     end
   end
   
+  it "should honor timeout" do
+    begin
+      Billwise.new @options.merge!({ :timeout => 1 })
+    rescue => e
+     e.to_s.should == "Timeout was reached"
+    end
+  end
+  
   it "should find a valid customer" do
     result = @billwise.find_customer({ :customerCd => '000155' })
     result[:customer_cd].should == "000155"

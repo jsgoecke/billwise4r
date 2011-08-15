@@ -70,7 +70,7 @@ class Billwise
   # @return [Hash] the methods and their ordered parameters
   def tag_order
     actions = {}
-    MultiXml.parse(@soap_driver.wsdl.to_xml)['definitions']['types']['schema'][2]['element'].each do |action|
+    MultiXml.parse(@soap_driver.wsdl.xml)['definitions']['types']['schema'][2]['element'].each do |action|
       attributes = []
       if action['complexType']['sequence']['element'].instance_of?(Hash)
         attributes << action['complexType']['sequence']['element']['name'].to_sym

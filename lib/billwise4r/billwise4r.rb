@@ -23,8 +23,11 @@ class Billwise
     @soap_driver = Savon::Client.new do
       wsse.credentials params[:username] , params[:password]
       wsdl.document = params[:wsdlUrl] || 'https://cwa021.connect4billing.com/axis2/services/ConnectSmService?wsdl'
+
+      
     end
-        
+    @soap_driver.http.read_timeout = params[:timeout] || 300
+    
     @tag_order  = tag_order
     
     MultiXml.parser = :nokogiri
@@ -67,7 +70,7 @@ class Billwise
   # @return [Hash] the methods and their ordered parameters
   def tag_order
     actions = {}
-    MultiXml.parse(@soap_driver.wsdl.to_xml)['definitions']['types']['schema'][2]['element'].each do |action|
+    MultiXml.parse(@soap_driver.wsdl.xml)['definitions']['types']['schema'][2]['element'].each do |action|
       attributes = []
       if action['complexType']['sequence']['element'].instance_of?(Hash)
         attributes << action['complexType']['sequence']['element']['name'].to_sym

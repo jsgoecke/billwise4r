@@ -1,7 +1,7 @@
 billwise4r
 ==========
 
-Gem for working with the Billwise SOAP/XML API.
+Gem for working with the Billwise SOAP/XML API. Ruby 1.9.x + 
 
 Examples
 --------

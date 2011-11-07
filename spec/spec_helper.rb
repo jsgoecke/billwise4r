@@ -7,5 +7,5 @@ require 'fakeweb'
 require 'awesome_print'
 
 RSpec.configure do |config|
-  
+
 end

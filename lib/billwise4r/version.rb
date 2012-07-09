@@ -1,3 +1,3 @@
 module Billwise4r
-  VERSION = "0.2.2"
+  VERSION = "0.3.0"
 end

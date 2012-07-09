@@ -10,35 +10,39 @@ class Billwise
     # Make sure all params we need are here or raise an error
     check_initialization_params(params)
 
-    @companyCd = params[:companyCd]
-    log        = params[:log]           || false
-    log_level  = params[:log_level]     || :info
-    @httpi_log   = params[:httpi_log]   || false
+    @companyCd        =  params[:companyCd]
+    log               =  params[:log]           || false
+    log_level         =  params[:log_level]     || :info
+    @httpi_log        =  params[:httpi_log]     || false
+    @ssl_verify_mode  =  params[:verify_mode]   || "peer"
+    @read_timeout     =  params[:read_timeout]  || 300
 
     Savon.configure do |config|
-      config.log       = log
-      config.log_level = log_level
-      config.env_namespace = :soap
+      config.log            =  log
+      config.log_level      =  log_level
+      config.env_namespace  =  :soap
     end
 
-    @soap_endpoint  = URI.parse params[:endpoint] || 'https://cwa021.connect4billing.com:8443/axis2/services/ConnectSmService.ConnectSmServiceHttpSoap12Endpoint/'
-    @soap_namespace = params[:namespace] || 'http://connectsm.ws.bwse.com/xsd'
-
-    @soap_version   = 2
-
-
+    @soap_endpoint   =  URI.parse params[:endpoint] || 'https://cwa021.connect4billing.com:8443/axis2/services/ConnectSmService.ConnectSmServiceHttpSoap12Endpoint/'
+    @soap_namespace  =  params[:namespace]          || 'http://connectsm.ws.bwse.com/xsd'
+    @soap_version    =  2
 
     # Build our SOAP driver
     @soap_driver = Savon::Client.new do
       wsse.credentials params[:username] , params[:password]
       wsdl.document =  'https://cwa021.connect4billing.com:8443/axis2/services/ConnectSmService?wsdl'
-
     end
-    @soap_driver.http.read_timeout = 300
 
-    @tag_order  = tag_order
+    @soap_driver.http.read_timeout                =  @read_timeout
+    @soap_driver.http.auth.ssl.verify_mode        =  @ssl_verify_mode.to_sym                                     # or one of [:peer, :fail_if_no_peer_cert, :client_once]
+    @soap_driver.http.auth.ssl.cert_key_file      =  params[:cert_key_file]      if  params[:cert_key_file]      # the private key file to use
+    @soap_driver.http.auth.ssl.cert_key_password  =  params[:cert_key_password]  if  params[:cert_key_password]  # the key file's password
+    @soap_driver.http.auth.ssl.cert_file          =  params[:cert_file]          if  params[:cert_file]          # the certificate file to use
+    @soap_driver.http.auth.ssl.ca_cert_file       =  params[:ca_cert_file]       if  params[:ca_cert_file]       # the ca certificate file to use
 
-    MultiXml.parser = :nokogiri
+    @tag_order                                    =  tag_order
+
+    MultiXml.parser                               =  :nokogiri
   end
 
   ##
@@ -50,11 +54,11 @@ class Billwise
     begin
       HTTPI.log = @httpi_log
       response = @soap_driver.request :wsdl, method do |soap, wsse|
-        soap.version    = @soap_version
-        soap.endpoint   = @soap_endpoint
-        soap.namespaces = Hash.new
-        soap.namespaces["xmlns:soap"] = "http://www.w3.org/2003/05/soap-envelope"
-        soap.namespaces["xmlns:ins0"] = @soap_namespace
+        soap.version                   =  @soap_version
+        soap.endpoint                  =  @soap_endpoint
+        soap.namespaces                =  Hash.new
+        soap.namespaces["xmlns:soap"]  =  "http://www.w3.org/2003/05/soap-envelope"
+        soap.namespaces["xmlns:ins0"]  =  @soap_namespace
 
         fields = { :companyCd => @companyCd }.merge!(params)
 

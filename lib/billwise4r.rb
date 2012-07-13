@@ -14,7 +14,7 @@ class Billwise
     log               =  params[:log]           || false
     log_level         =  params[:log_level]     || :info
     @httpi_log        =  params[:httpi_log]     || false
-    @ssl_verify_mode  =  params[:verify_mode]   || "peer"
+    @ssl_verify_mode  =  params[:verify_mode]   || :peer
     @read_timeout     =  params[:read_timeout]  || 300
 
     Savon.configure do |config|
@@ -22,6 +22,8 @@ class Billwise
       config.log_level      =  log_level
       config.env_namespace  =  :soap
     end
+
+    HTTPI.log = @httpi_log
 
     @soap_endpoint   =  URI.parse params[:endpoint] || 'https://cwa021.connect4billing.com:8443/axis2/services/ConnectSmService.ConnectSmServiceHttpSoap12Endpoint/'
     @soap_namespace  =  params[:namespace]          || 'http://connectsm.ws.bwse.com/xsd'

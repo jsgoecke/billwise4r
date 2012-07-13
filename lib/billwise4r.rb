@@ -14,7 +14,7 @@ class Billwise
     log               =  params[:log]           || false
     log_level         =  params[:log_level]     || :info
     @httpi_log        =  params[:httpi_log]     || false
-    @ssl_verify_mode  =  params[:verify_mode]   || "peer"
+    @ssl_verify_mode  =  params[:verify_mode]   || :peer
     @read_timeout     =  params[:read_timeout]  || 300
 
     Savon.configure do |config|

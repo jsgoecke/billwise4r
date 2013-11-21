@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.description            =  %q{Ruby lib for consuming the Billwise SOAP/XML API}
   s.rubygems_version       =  %q{1.5.0}
   s.required_ruby_version  =  '>= 1.9'
+  s.licenses               = ['MIT']
   s.summary                =  %q{Ruby lib for consuming the Billwise SOAP/XML API}
   s.test_files             =  [
     "spec/billwise4r_spec.rb",

@@ -5,7 +5,7 @@ Gem for working with the Billwise SOAP/XML API. Ruby 1.9.x +
 
 Examples
 --------
-
+```ruby
 	require 'billwise4r'
 	billwise = Billwise.new({ :companyCd  => 123,
 	                          :username   => 'username',
@@ -20,7 +20,7 @@ Examples
 	                                    :serviceId  => 'A000000000000456',
 	                                    :status     => 'A' })
 
-
+```
 Optional Configution Parameters
 ---------
 
@@ -30,8 +30,13 @@ Optional Configution Parameters
     cert_file 					-  the certificate file to use
     ca_cert_file				-  the ca certificate file to use
 
+Authors
+-------
+
+Jason Goecke ([@jsgoecke](http://twitter.com/jsgoecke)) & John Dyer ([@thedyers](http://twitter.com/thedyers))
+
 Copyright
 ---------
 
-Copyright (c) 2010, 2011 Jason Goecke & John Dyer. See LICENSE.txt for further details.
+Copyright (c) 2010-2014 Jason Goecke. See LICENSE.txt for further details.
 

@@ -1,6 +1,5 @@
 billwise4r
 ==========
-[![Build Status](https://drone.io/github.com/jsgoecke/billwise4r/status.png)](https://drone.io/github.com/jsgoecke/billwise4r/latest)
 
 Gem for working with the Billwise SOAP/XML API. Ruby 1.9.x +
 
